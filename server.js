@@ -15,19 +15,20 @@ app.get('/api/download', async (req, res) => {
     }
 
     try {
-        const response = await axios.get(`https://api.snaptik.app/v1?url=${url}`);
-        const downloadLink = response.data.url;
-        
+        const response = await axios.get(`https://www.tikwm.com/api/?url=${url}`);
+        const downloadLink = response.data.data.play;
+
         if (downloadLink) {
             res.json({ success: true, downloadLink });
         } else {
             res.json({ success: false, message: "الرابط غير صالح" });
         }
     } catch (error) {
+        console.log(error.message);
         res.json({ success: false, message: "حدث خطأ أثناء التحميل" });
     }
 });
 
 app.listen(PORT, () => {
-    console.log(`السيرفر شغال على http://localhost:${PORT}`);
+    console.log(`✅ السيرفر شغال على http://localhost:${PORT}`);
 });
