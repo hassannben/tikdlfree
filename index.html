@@ -87,46 +87,36 @@
 </div>
 
 <script>
-    async function downloadVideo() {
-        const url = document.getElementById("url").value;
-        const downloadLink = document.getElementById("downloadLink");
-        const loader = document.getElementById("loader");
+async function downloadVideo() {
+  const url = document.getElementById("url").value;
+  const loader = document.getElementById("loader");
+  const downloadLink = document.getElementById("downloadLink");
 
-        downloadLink.innerHTML = "";
-        
-        if (!url) {
-            alert("الرجاء إدخال رابط TikTok");
-            return;
-        }
+  if (!url) {
+    alert("المرجو إدخال الرابط");
+    return;
+  }
 
-        const tiktokRegex = /^https:\/\/www\.tiktok\.com\/.+|^https:\/\/vm\.tiktok\.com\/.+/;
-        if (!tiktokRegex.test(url)) {
-            alert("الرجاء إدخال رابط TikTok صالح");
-            return;
-        }
+  loader.style.display = "block"; // تشغيل التحميل
+  downloadLink.innerHTML = "";
 
-        loader.style.display = "block";
+  try {
+    const response = await fetch(`https://tikdlfree.vercel.app/api/download?url=${encodeURIComponent(url)}`);
+    const data = await response.json();
 
-        try {
-            const response = await fetch(`http://localhost:3000/api/download?url=${encodeURIComponent(url)}`);
-            loader.style.display = "none";
+    loader.style.display = "none"; // إيقاف التحميل
 
-            if (!response.ok) {
-                throw new Error("فشل الاتصال بالخادم");
-            }
-
-            const data = await response.json();
-
-            if (data.success) {
-                downloadLink.innerHTML = `<a href="${data.downloadLink}" target="_blank">تحميل الفيديو الآن</a>`;
-            } else {
-                downloadLink.innerHTML = `<p style="color: red;">${data.message || "فشل في تحميل الفيديو، حاول مجددًا"}</p>`;
-            }
-        } catch (error) {
-            loader.style.display = "none";
-            downloadLink.innerHTML = `<p style="color: red;">حدث خطأ: ${error.message}</p>`;
-        }
+    if (data.success) {
+      downloadLink.innerHTML = `<a href="${data.downloadLink}" target="_blank">تحميل الفيديو 🔥</a>`;
+    } else {
+      alert(data.message);
     }
+  } catch (error) {
+    loader.style.display = "none";
+    alert("حدث خطأ أثناء التحميل");
+  }
+}
+
 </script>
 </body>
 </html>
